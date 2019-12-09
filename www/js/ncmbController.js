@@ -1,7 +1,7 @@
 // This is a JavaScript file
 var ncmbController = {
-  APPLICATION_KEY:appKey,
-  CLIENT_KEY:clientKey,
+  APPLICATION_KEY:"762455a0d383e2e1eedcd991020fe949786b9220a351601fa60b29cb756b7bad",
+  CLIENT_KEY:"94692fc0b2d453016d6972f05f3e9ba57b21a4bea563ab9905ab95459111ab92",
 
   ncmb: null,
   currentUser: null,  // ログインしたユーザーのオブジェクトを格納
@@ -20,11 +20,40 @@ var ncmbController = {
         // [3]送信処理
         scoreData.save()
             .then(function (saved) {
-                alert("スコア送信完了！");
+                //alert("スコア送信完了！");
             })
           .catch(function(err){
                 console.log(err);
             });
+
+            // 順位を求める
+// ”score” フィールドの値が score より大きいものを取得
+Score.greaterThan("score", score)
+    .count()    // 件数を結果に含める
+    .fetchAll()
+    .then(function(scores){
+        // countの結果は、取得データscoresのcountプロパティに含まれる
+
+        // 0件のとき正しく動作するように条件分岐
+        var rank = (scores.count !== undefined) ? parseInt(scores.count) + 1 : 1;
+
+        // ダイアログの表示
+        if(typeof navigator.notification !== 'undefined'){
+            navigator.notification.alert(
+                "今回の順位は #" + rank + " でした！",
+                function(){},
+                "スコア送信完了！"
+                );
+        } else {
+            alert("スコア送信完了！\n今回の順位は #" + rank + " でした！");
+        }
+    })
+
+            
+
+            
+
+
     },
 
     // 初期化
